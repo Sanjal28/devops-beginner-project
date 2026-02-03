@@ -4,14 +4,15 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                echo 'Pulling code from GitHub'
+                echo 'Checking out code from GitHub'
                 checkout scm
             }
         }
 
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Build successful – frontend project'
+                echo 'Building Docker image'
+                sh 'docker build -t devops-frontend:ci .'
             }
         }
     }
