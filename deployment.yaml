@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-frontend
+  template:
+    metadata:
+      labels:
+        app: devops-frontend
+    spec:
+      imagePullSecrets:
+        - name: jfrog-regcred
+      containers:
+        - name: frontend
+          image: trial0dpg9z.jfrog.io/docker-trial/devops-frontend:v1
+          ports:
+            - containerPort: 80
