@@ -45,11 +45,19 @@ pipeline {
                 """
             }
         }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh """
+                    sed "s|IMAGE_PLACEHOLDER|${FULL_IMAGE}|g" deployment.yaml | kubectl apply -f -
+                """
+            }
+        }
     }
 
     post {
         success {
-            echo "Image pushed to JFrog: ${FULL_IMAGE}"
+            echo "✅ Image deployed to Kubernetes: ${FULL_IMAGE}"
         }
     }
 }
