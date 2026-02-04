@@ -10,6 +10,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout Code') {
             steps {
                 checkout scm
@@ -18,7 +19,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:ci ."
+                sh """
+                    docker build -t ${IMAGE_NAME}:ci .
+                """
             }
         }
 
@@ -30,8 +33,8 @@ pipeline {
                     passwordVariable: 'JFROG_TOKEN'
                 )]) {
                     sh """
-                        echo \$JFROG_TOKEN | docker login ${JFROG_REGISTRY} \
-                        -u \$JFROG_USER --password-stdin
+                        echo "\$JFROG_TOKEN" | docker login ${JFROG_REGISTRY} \
+                        -u "\$JFROG_USER" --password-stdin
                     """
                 }
             }
@@ -49,7 +52,8 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 sh """
-                    sed "s|IMAGE_PLACEHOLDER|${FULL_IMAGE}|g" deployment.yaml | kubectl apply -f -
+                    sed "s|IMAGE_PLACEHOLDER|${FULL_IMAGE}|g" deployment.yaml \
+                    | kubectl apply -f -
                 """
             }
         }
@@ -57,7 +61,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ Image deployed to Kubernetes: ${FULL_IMAGE}"
+            echo "✅ Successfully deployed ${FULL_IMAGE} to Kubernetes"
         }
     }
 }

@@ -16,6 +16,7 @@ spec:
         - name: jfrog-regcred
       containers:
         - name: frontend
-          image: trial0dpg9z.jfrog.io/docker-trial/devops-frontend:v1
+          image: IMAGE_PLACEHOLDER
           ports:
             - containerPort: 80
+
